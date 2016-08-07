@@ -1,9 +1,10 @@
 package net.persei.dionysus.blocks;
 
+import net.persei.dionysus.Data;
 import net.persei.dionysus.Setup;
 
 public class SetStateBlock extends Block {
-
+	private static final long serialVersionUID = -6111464916913814484L;
 	private String state;
 	
 	public SetStateBlock(String status) {

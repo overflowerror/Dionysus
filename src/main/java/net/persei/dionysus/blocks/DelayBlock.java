@@ -1,6 +1,9 @@
 package net.persei.dionysus.blocks;
 
+import net.persei.dionysus.Data;
+
 public class DelayBlock extends Block {
+	private static final long serialVersionUID = -3892822705334086078L;
 	private long sleepTime = 1000;
 	
 	public long getSleepTime() {

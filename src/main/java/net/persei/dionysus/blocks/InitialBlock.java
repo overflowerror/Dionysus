@@ -3,11 +3,13 @@ package net.persei.dionysus.blocks;
 import java.util.LinkedList;
 import java.util.List;
 
+import net.persei.dionysus.Data;
 import net.persei.dionysus.MidiTrigger;
 import net.persei.dionysus.Setup;
 import net.persei.dionysus.exceptions.UnexpectedDataTypeException;
 
 public abstract class InitialBlock extends Block {
+	private static final long serialVersionUID = 7065582566195305774L;
 	protected List<MidiTrigger> triggers = new LinkedList<MidiTrigger>();
 	
 	public List<MidiTrigger> getTriggers() {

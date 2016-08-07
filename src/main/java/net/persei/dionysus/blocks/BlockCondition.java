@@ -2,6 +2,7 @@ package net.persei.dionysus.blocks;
 
 import java.util.Map;
 
+import net.persei.dionysus.Data;
 import net.persei.dionysus.Setup;
 import net.persei.dionysus.exceptions.DataValueNotAvailableException;
 import net.persei.dionysus.exceptions.MalformedBlockConditionException;

@@ -3,6 +3,7 @@ package net.persei.dionysus.blocks;
 import java.util.LinkedList;
 import java.util.List;
 
+import net.persei.dionysus.Data;
 import net.persei.dionysus.exceptions.UnexpectedDataTypeException;
 
 public class BlockHelper {

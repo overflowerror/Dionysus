@@ -3,8 +3,10 @@ package net.persei.dionysus.blocks;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.persei.dionysus.Data;
+
 public class SetDataBlock extends Block {
-	
+	private static final long serialVersionUID = 1007781353625719636L;
 	private String data;
 	private String key;
 	

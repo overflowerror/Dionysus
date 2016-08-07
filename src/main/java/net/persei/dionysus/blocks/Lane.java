@@ -1,11 +1,13 @@
 package net.persei.dionysus.blocks;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 
-import net.persei.dionysus.exceptions.UnexpectedDataTypeException;
+import net.persei.dionysus.Data;
 
-public class Lane {
+public class Lane implements Serializable {
+	private static final long serialVersionUID = -317193861413134584L;
 	private List<Block> attachedBlocks = new LinkedList<Block>();
 	static private int count = 1;
 	final private int id;

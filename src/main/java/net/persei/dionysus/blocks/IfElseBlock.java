@@ -1,7 +1,9 @@
 package net.persei.dionysus.blocks;
 
+import net.persei.dionysus.Data;
+
 public class IfElseBlock extends ConditionalBlock {
-	
+	private static final long serialVersionUID = 851005550879292074L;
 	private BlockCondition condition;
 	
 	public IfElseBlock(BlockCondition condition) {

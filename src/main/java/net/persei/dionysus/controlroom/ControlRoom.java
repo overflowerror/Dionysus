@@ -44,10 +44,6 @@ public class ControlRoom extends JFrame {
 			super.paintComponents(g);
 			g.setColor(Color.BLACK);
 			List<InitialBlock> initBlocks = setup.getInitBlocks();
-			
-			for (int i = 0; i < initBlocks.size(); i++) {
-			
-			}
 		}
 	}
 }
