@@ -22,13 +22,14 @@ public class VideoPlayer extends JFrame implements Player {
 	
 	private boolean loop = false;
 	private boolean fullscreen = false;
+	private String name;
 	
 	public boolean isFullscreen() {
 		return fullscreen;
 	}
 
-	public VideoPlayer(boolean fullscreen) throws HeadlessException {
-		this();
+	public VideoPlayer(String name, boolean fullscreen) throws HeadlessException {
+		this(name);
 		dispose();
 		if (fullscreen) {
 			setExtendedState(JFrame.MAXIMIZED_BOTH); 
@@ -36,8 +37,10 @@ public class VideoPlayer extends JFrame implements Player {
 		}
 		setVisible(true);
 	}
-	public VideoPlayer() throws HeadlessException {
+	public VideoPlayer(String name) throws HeadlessException {
 		super(Main.TITLE);
+
+		this.name = name;
 		setBounds(100, 100, 600, 400);
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		setVisible(true);
@@ -77,5 +80,9 @@ public class VideoPlayer extends JFrame implements Player {
 	
 	public  EmbeddedMediaPlayer getMediaPlayer() {
 		return player.getMediaPlayer();
+	}
+	
+	public String getName() {
+		return name;
 	}
 }
