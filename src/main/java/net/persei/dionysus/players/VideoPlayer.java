@@ -85,4 +85,14 @@ public class VideoPlayer extends JFrame implements Player {
 	public String getName() {
 		return name;
 	}
+
+	@Override
+	public void stop() {
+		getMediaPlayer().stop();
+	}
+
+	@Override
+	public boolean isPlaying() {
+		return getMediaPlayer().isPlaying();
+	}
 }
