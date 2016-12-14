@@ -1,5 +1,8 @@
 package net.persei.dionysus.commands;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+
 import net.persei.dionysus.managers.MusicManager;
 
 public class MusicCommand extends Command {
@@ -10,11 +13,14 @@ public class MusicCommand extends Command {
 	private long duration;
 	private boolean loop;
 	
-	public MusicCommand(String name, MusicManager musicManager, MusicCommandType type, String file, long duration, boolean loop) {
+	public MusicCommand(String name, MusicManager musicManager, MusicCommandType type, String file, long duration, boolean loop) throws FileNotFoundException {
 		this.name = name;
 		this.musicManager = musicManager;
 		this.type = type;
 		this.file = file;
+		if (file != null)
+			if (!new File(file).exists())
+				throw new FileNotFoundException(file);
 		this.duration = duration;
 		this.loop = loop;
 	}

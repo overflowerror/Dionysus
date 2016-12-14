@@ -3,6 +3,7 @@ package net.persei.dionysus.managers;
 import java.util.LinkedList;
 import java.util.List;
 
+import net.persei.dionysus.Main;
 import net.persei.dionysus.commands.Command;
 import net.persei.dionysus.events.Event;
 
@@ -54,6 +55,20 @@ public class CommandManager {
 
 	static public long maxInterval = 1 * 1000;
 
+	public boolean registerSequence(Sequence sequence) {
+		checkTimeout();
+		this.sequence.addAll(sequence);
+		lastChange = System.currentTimeMillis();
+		return checkForCommand();
+	}
+	
+	private void checkTimeout() {
+		if (System.currentTimeMillis() - lastChange > maxInterval) {
+			this.sequence = new Sequence(context);
+			executedCommands = new LinkedList<>();
+		}
+	}
+
 	public boolean registerEvent(Event event) {
 		if (System.currentTimeMillis() - lastChange > maxInterval) {
 			sequence = new Sequence(context);
@@ -77,7 +92,8 @@ public class CommandManager {
 				if (executedCommands.contains(ct))
 					continue;
 				System.out.println("Executing " + ct.command.getName() + "...");
-				ct.command.execute();
+				if (!Main.test)
+					ct.command.execute();
 				executedCommands.add(ct);
 				result = true;
 			}
@@ -91,6 +107,38 @@ public class CommandManager {
 
 	public void addCommand(Sequence sequence, Command command) {
 		System.out.println("Adding command " + command.getName() + " on " + sequence);
+		if (containsSequence(sequence)) {
+			System.err.println("#########\nDuplicated sequence!\n#########");
+			return;
+		}
 		commands.add(new CommandTuple(sequence, command));
+	}
+
+	private boolean containsSequence(Sequence sequence) {
+		for (CommandTuple tuple : commands) {
+			if (tuple.sequence.equals(sequence))
+				return true;
+		}
+		return false;
+	}
+
+	public List<Event> getEventsOfCommandsInSequence() {
+		checkTimeout();
+		List<Event> events = new LinkedList<Event>();
+		for (CommandTuple tuple : commands) {
+			int miss = 0;
+			Event missedEvent = null;
+			for (Event event : tuple.sequence) {
+				if (sequence.contains(event))
+					continue;
+				if (++miss > 1)
+					break;
+				missedEvent = event;
+			}
+			if (miss != 1)
+				continue;
+			events.add(missedEvent);
+		}
+		return events;
 	}
 }

@@ -21,6 +21,7 @@ public class VideoManager {
 	public void play(String name, String file, boolean loop) {
 		getVideoPlayer(name).playFile(file);
 		getVideoPlayer(name).setLoop(loop);
+		getVideoPlayer(name).getMediaPlayer().setVolume(70);
 	}
 	
 	public void play(String name) {

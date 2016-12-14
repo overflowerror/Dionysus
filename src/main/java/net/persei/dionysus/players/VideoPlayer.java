@@ -38,7 +38,7 @@ public class VideoPlayer extends JFrame implements Player {
 		setVisible(true);
 	}
 	public VideoPlayer(String name) throws HeadlessException {
-		super(Main.TITLE);
+		super(Main.TITLE + " - " + name);
 
 		this.name = name;
 		setBounds(100, 100, 600, 400);

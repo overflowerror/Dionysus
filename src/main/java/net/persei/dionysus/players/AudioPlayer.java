@@ -1,5 +1,6 @@
 package net.persei.dionysus.players;
 
+import net.persei.dionysus.Logger;
 import uk.co.caprica.vlcj.component.AudioMediaPlayerComponent;
 import uk.co.caprica.vlcj.player.MediaPlayer;
 
@@ -19,6 +20,7 @@ public class AudioPlayer implements Player {
 	}
 	
 	public void playFile(String file) {
+		Logger.logMusic(file);
 		getMediaPlayer().playMedia(file);
 	}
 	

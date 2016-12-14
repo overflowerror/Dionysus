@@ -1,6 +1,5 @@
 package net.persei.dionysus.commands;
 
-import net.persei.dionysus.managers.MusicManager;
 import net.persei.dionysus.managers.SoundFXManager;
 
 public class SoundFXCommand extends Command {
@@ -9,10 +8,11 @@ public class SoundFXCommand extends Command {
 	private SoundFXManager soundManager;
 	private String file;
 	
-	public SoundFXCommand(String name, SoundFXManager soundManager, MusicCommandType type, String file) {
+	public SoundFXCommand(String name, SoundFXManager soundManager, SoundFXComanndType type, String file) {
 		this.name = name;
 		this.soundManager = soundManager;
 		this.file = file;
+		this.type = type;
 	}
 	
 	public SoundFXCommand(String name) {

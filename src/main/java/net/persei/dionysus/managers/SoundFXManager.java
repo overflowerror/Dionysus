@@ -18,12 +18,14 @@ public class SoundFXManager {
 		for (AudioPlayer player : players) {
 			if (player.isPlaying())
 				continue;
+			player.getMediaPlayer().setVolume(100);
 			player.playFile(file);
 			return;
 		}
 		AudioPlayer player = (AudioPlayer) PlayerManager.getInstance().create(PlayerType.Audio,
 				"FXPlayer_" + name + "_" + players.size());
 		players.add(player);
+		player.getMediaPlayer().setVolume(100);
 		player.playFile(file);
 	}
 	

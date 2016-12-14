@@ -15,6 +15,7 @@ import javax.sound.midi.MidiDevice;
 import javax.sound.midi.MidiMessage;
 import javax.sound.midi.MidiDevice.Info;
 
+import net.persei.dionysus.commands.Command;
 import net.persei.dionysus.events.Event;
 
 public class MidiManager {
@@ -28,6 +29,8 @@ public class MidiManager {
 
 		System.out.println("Searching for midi devices...");
 		for (Info info : infos) {
+			if (info.getName().contains("[default]"))
+				continue;
 			MidiDevice device = MidiSystem.getMidiDevice(info);
 			if (info.getName().contains("MPD18")) {
 				System.out.println("Found MPD18: " + info.getName());
@@ -110,8 +113,10 @@ public class MidiManager {
 	}
 
 	private void handle(boolean press, MidiSource source, int channel, int x, int y, int v) {
-		System.out.println(press + " on " + source + ": " + x + ", " + y + " - " + v);
-		commandManager.registerEvent(new Event(source, press, channel, x, y, v));
+//		System.out.println(press + " on " + source + ": " + x + ", " + y + " - " + v);
+		if (commandManager.registerEvent(new Event(source, press, channel, x, y, v))) {
+//			System.out.println("no command on " + source + ": " + x + ", " + y + " - " + v);
+		}
 	}
 
 	public void feedbackSequence() {
@@ -138,29 +143,63 @@ public class MidiManager {
 			return;
 		}
 		new Thread() {
+			@Override
 			public void run() {
 				try {
 					while (true) {
 						List<Event> events = new Sequence(commandManager.getSequence());
 						List<Event> context = commandManager.getContext();
+						List<Event> available = commandManager.getEventsOfCommandsInSequence();
+						
 						for (Event event : context) {
 							if (events.contains(event))
 								events.remove(event);
 						}
-
+						
+						for (Event event : available) {
+							if (events.contains(event))
+								events.remove(event);
+						}
+						
 						int intensity = 0x03
 								- (int) ((3.0 * (System.currentTimeMillis() - commandManager.getLastChange())
 										/ CommandManager.maxInterval));
 						
-						clearLaunchpad(launchpad);
-						for (Event event : context) {
-							setLaunchpad(launchpad, event.getX(), event.getY(), 0x00, 0x03);
-						}
-						if (intensity > 0) {
-							for (Event event : events) {
-								setLaunchpad(launchpad, event.getX(), event.getY(), intensity, 0x00);
+						for (int x = 0; x < 9; x++) {
+							for (int y = 0; y < 8; y++) {
+								if (coordinateIsInEventList(context, x, y))
+									setLaunchpad(launchpad, x, y, 0x00, 0x03);
+								else if (intensity > 0 && coordinateIsInEventList(events, x, y))
+									setLaunchpad(launchpad, x, y, intensity, 0x00);
+								else if (coordinateIsInEventList(available, x, y))
+									setLaunchpad(launchpad, x, y, 0x01, 0x01);
+								else
+									setLaunchpad(launchpad, x, y, 0, 0);
 							}
 						}
+						
+						
+//						clearLaunchpad(launchpad);
+//						
+//						for (Event event : context) {
+//							if (event.getSource() != MidiSource.LAUNCHPAD)
+//								continue;
+//							setLaunchpad(launchpad, event.getX(), event.getY(), 0x00, 0x03);
+//						}
+//						
+//						for (Event event : available) {
+//							if (event.getSource() != MidiSource.LAUNCHPAD)
+//								continue;
+//							setLaunchpad(launchpad, event.getX(), event.getY(), 0x01, 0x01);
+//						}
+//						
+//						if (intensity > 0) {
+//							for (Event event : events) {
+//								if (event.getSource() != MidiSource.LAUNCHPAD)
+//									continue;
+//								setLaunchpad(launchpad, event.getX(), event.getY(), intensity, 0x00);
+//							}
+//						}
 						Thread.sleep(100);
 					}
 				} catch (InterruptedException e) {
@@ -189,5 +228,15 @@ public class MidiManager {
 		} catch (MidiUnavailableException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	private boolean coordinateIsInEventList(List<Event> events, int x, int y) {
+		for (Event event : events) {
+			if (event.getSource() != MidiSource.LAUNCHPAD)
+				continue;
+			if (event.getX() == x && event.getY() == y)
+				return true;
+		}
+		return false;
 	}
 }

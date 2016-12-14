@@ -1,5 +1,8 @@
 package net.persei.dionysus.commands;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+
 import net.persei.dionysus.managers.VideoManager;
 
 public class VideoCommand extends Command {
@@ -11,10 +14,13 @@ public class VideoCommand extends Command {
 	private boolean loop;
 
 	public VideoCommand(String name, VideoCommandType type, VideoManager videoManager, String playerName, String file,
-			boolean loop) {
+			boolean loop) throws FileNotFoundException {
 		this.name = name;
 		this.type = type;
 		this.videoManager = videoManager;
+		if (file != null)
+			if (!new File(file).exists())
+				throw new FileNotFoundException(file);
 		this.file = file;
 		this.playerName = playerName;
 		this.loop = loop;
